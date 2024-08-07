@@ -45,6 +45,11 @@ resource "aws_security_group" "sg" {
   }
 }
 
+resource "aws_s3_bucket" "Bucket" {
+  bucket = "bucket1"
+  acl = "private"
+}
+
 output "Webserver-Public-IP" {
   value = aws_instance.webserver.public_ip
 }
