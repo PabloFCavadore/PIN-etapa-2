@@ -1,6 +1,9 @@
 name: Terraform Apply
 
-on: [push]
+on: 
+  push:
+    branches: 
+      - main
 
 jobs:
   terraform_apply:
@@ -43,4 +46,6 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'us-east-1'
       run: terraform apply -auto-approve -input=false
+      
+      
 
