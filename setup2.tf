@@ -4,7 +4,7 @@ provider "aws" {
 
 data "aws_vpc" "vpc_default" {
   default = true
-}
+} 
 
 #data source para obtener la region
 data "aws_region" "current" {}
