@@ -2,43 +2,21 @@ provider "aws" {
   region = "us-east-1"
 }
 
-#usamos la vpc proporcionada
-data "aws_vpc" "existing_vpc" { id = "vpc-0583a731fd747f71f" }
-
-#Create IGW in us-east-1
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.vpc.id
+data "aws_vpc" "vpc_default" {
+  default = true
 }
 
+#data source para obtener la region
+data "aws_region" "current" {}
 
+#data source para id de la cuenta de AWS
+data "aws_caller_identity" "current" {}
 
-#Get main route table to modify
-data "aws_route_table" "main_route_table" {
-  filter {
-    name   = "association.main"
-    values = ["true"]
-  }
-  filter {
-    name   = "vpc-id"
-    values = [aws_vpc.vpc.id]
-  }
-}
-#Create route table in us-east-1
-resource "aws_default_route_table" "internet_route" {
-  default_route_table_id = data.aws_route_table.main_route_table.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
-  tags = {
-    Name = "Terraform-RouteTable"
-  }
+data "aws_subnet" "az_a" {
+  vpc_id            = data.aws_vpc.vpc_default.id
+  availability_zone = "us-east-1"
 }
 
-#Get all available AZ's in VPC for master region
-data "aws_availability_zones" "azs" {
-  state = "available"
-}
 
 #Create SG for allowing TCP/80 & TCP/22
 resource "aws_security_group" "sg" {
