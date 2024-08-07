@@ -50,6 +50,12 @@ resource "aws_s3_bucket" "Bucket" {
   acl = "private"
 }
 
+resource "aws_dynamodb_table" "my_table" { 
+  name = "tabla1"
+   billing_mode   = "provisioned"
+    hash_key       = "id" 
+}
+
 output "Webserver-Public-IP" {
   value = aws_instance.webserver.public_ip
 }
